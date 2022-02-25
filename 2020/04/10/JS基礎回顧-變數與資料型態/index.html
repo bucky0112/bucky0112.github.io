@@ -1,0 +1,194 @@
+<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JS 基礎回顧 - 變數與資料型別 | Bucky's f2e bucket</title><meta name="keywords" content="variable,data-type"><meta name="author" content="Bucky Chu"><meta name="copyright" content="Bucky Chu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="會寫這個系列，是想整理我之前的筆記，假如我哪天忘記的話，還可以讓我方便查找，順便加深自己的印象。第一篇來回顧變數，看如何定義跟指定各種型別的用法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS 基礎回顧 - 變數與資料型別">
+<meta property="og:url" content="https://bucky0112.github.io/2020/04/10/JS%E5%9F%BA%E7%A4%8E%E5%9B%9E%E9%A1%A7-%E8%AE%8A%E6%95%B8%E8%88%87%E8%B3%87%E6%96%99%E5%9E%8B%E6%85%8B/index.html">
+<meta property="og:site_name" content="Bucky&#39;s f2e bucket">
+<meta property="og:description" content="會寫這個系列，是想整理我之前的筆記，假如我哪天忘記的話，還可以讓我方便查找，順便加深自己的印象。第一篇來回顧變數，看如何定義跟指定各種型別的用法。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2020-04-10T09:39:39.000Z">
+<meta property="article:modified_time" content="2022-02-24T08:37:19.630Z">
+<meta property="article:author" content="Bucky Chu">
+<meta property="article:tag" content="javascript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://bucky0112.github.io/2020/04/10/JS%E5%9F%BA%E7%A4%8E%E5%9B%9E%E9%A1%A7-%E8%AE%8A%E6%95%B8%E8%88%87%E8%B3%87%E6%96%99%E5%9E%8B%E6%85%8B/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-163831260-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-163831260-1');
+</script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '複製成功',
+    error: '複製錯誤',
+    noSupport: '瀏覽器不支援'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '剛剛',
+    min: '分鐘前',
+    hour: '小時前',
+    day: '天前',
+    month: '個月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-02-24 16:37:19'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">標籤</div><div class="length-num">95</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分類</div><div class="length-num">19</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Bucky's f2e bucket</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">JS 基礎回顧 - 變數與資料型別</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">發表於</span><time class="post-meta-date-created" datetime="2020-04-10T09:39:39.000Z" title="發表於 2020-04-10 17:39:39">2020-04-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新於</span><time class="post-meta-date-updated" datetime="2022-02-24T08:37:19.630Z" title="更新於 2022-02-24 16:37:19">2022-02-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/JS-%E5%9F%BA%E7%A4%8E%E5%9B%9E%E9%A1%A7/">JS 基礎回顧</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="JS 基礎回顧 - 變數與資料型別"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">閱讀量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>會寫這個系列，是想整理我之前的筆記，假如我哪天忘記的話，還可以讓我方便查找，順便加深自己的印象。<br>第一篇來回顧變數，看如何定義跟指定各種型別的用法。</p>
+<span id="more"></span>
+
+<h2 id="變數"><a href="#變數" class="headerlink" title="變數"></a>變數</h2><hr>
+<p><img src="https://i.imgur.com/cPGhwBt.png" alt="Image"></p>
+<p><strong>變數</strong>像是一個容器，假設一個容器貼着 coca_cola 的標籤，裏面裝的是叫可樂的東西，當接觸到瓶子，就可以拿裏面的東西，裏面的東西就是可樂。<br>用 JavaScript 的語言來說就是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var coca_cola = &quot;可樂&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>var = variable 的縮寫</strong><br><strong>coca_cola = 容器的標籤（變數名稱）</strong><br><strong>可樂 = 容器裡裝的內容（值）</strong></p>
+<h2 id="資料型別"><a href="#資料型別" class="headerlink" title="資料型別"></a>資料型別</h2><hr>
+<h3 id="基本型別"><a href="#基本型別" class="headerlink" title="基本型別"></a>基本型別</h3><p>變數值的型別主要分成<strong>基本型別</strong>跟<strong>物件型別</strong>，這個部份先來討論基本型別：</p>
+<ul>
+<li>number 數字</li>
+<li>string 字串</li>
+<li>boolean 布林值</li>
+<li>undefined </li>
+<li>null</li>
+</ul>
+<p>例如：數字 7、字串 “hello”、布林值 true / false</p>
+<h4 id="數字、字串"><a href="#數字、字串" class="headerlink" title="數字、字串"></a>數字、字串</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var name = &quot;張無忌&quot;; // 字串，可用單引號或雙引號把文字包起來</span><br><span class="line">var power = 100000; // 數字，不需引號</span><br></pre></td></tr></table></figure>
+
+<p>如果要檢驗型別的話，可以使用 <code>typeof</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var num = “123”;</span><br><span class="line">console.log(typeof num) // 會得到 string </span><br></pre></td></tr></table></figure>
+
+<h4 id="布林值"><a href="#布林值" class="headerlink" title="布林值"></a>布林值</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var n = true;  // 布林值、布林值，不需引號</span><br><span class="line">console.log(n) // a = true，所以結果是 true</span><br></pre></td></tr></table></figure>
+
+<h4 id="undefined-跟-null"><a href="#undefined-跟-null" class="headerlink" title="undefined 跟 null"></a>undefined 跟 null</h4><p>而 undefined 跟 null 比較特別，看以下的例子：</p>
+<p>如果定義了一個叫做 hello 的變數，但沒有指定值，<br>這時候 hello 的值是 undefined 狀態</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var hello   // undefined</span><br></pre></td></tr></table></figure>
+
+<p>如果定義 world 這個變數，指定為 null，<br>這時 world 的值就是 null 狀態</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var world = null  // </span><br></pre></td></tr></table></figure>
+
+<p><strong>undefined = 未指定變數的內容，未定義但存在</strong><br><strong>null = 不存在</strong></p>
+<h3 id="如果把不同型別放在一起？"><a href="#如果把不同型別放在一起？" class="headerlink" title="如果把不同型別放在一起？"></a>如果把不同型別放在一起？</h3><p>同型別的值，例如數字放在一起，就會按照指示做加減乘除，但是如果不同型別放在一起會是如何？看以下的例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">console.log(1 + 1); // 印出 2</span><br><span class="line">console.log(1 + &quot;1&quot;); // 印出 11</span><br><span class="line">console.log(&quot;hello&quot; + 123); // 印出 hello123</span><br><span class="line">console.log(&quot;hello&quot; + true); // 印出 hellotrue</span><br><span class="line">console.log(123 + true); // 印出 124</span><br><span class="line">console.log(123 + false); // 印出 123</span><br><span class="line">console.log(123 + null); // 印出 123</span><br><span class="line">console.log(&quot;123&quot; + null); // 印出 123null</span><br><span class="line">console.log(123 + undefined); // 印出 NaN(Not a Number)</span><br><span class="line">console.log(&quot;123&quot; + undefined); // 印出 123undefined</span><br></pre></td></tr></table></figure>
+
+<h3 id="等號"><a href="#等號" class="headerlink" title="等號"></a>等號</h3><h4 id="a-1-1-是什麼情況"><a href="#a-1-1-是什麼情況" class="headerlink" title="a + 1 = 1 是什麼情況?"></a>a + 1 = 1 是什麼情況?</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var a = 1;</span><br><span class="line">a = a + 1;</span><br><span class="line">console.log(a);  // 2</span><br></pre></td></tr></table></figure>
+
+<p>= 不是等號，是指定<br>a = a + 1;是 a + 1 完再指定回 a</p>
+<p>接著再看以下的情況：</p>
+<h4 id="等號，不一定等於『等於』"><a href="#等號，不一定等於『等於』" class="headerlink" title="等號，不一定等於『等於』"></a>等號，不一定等於『等於』</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var age = 8;</span><br><span class="line">if (age = 10) &#123;</span><br><span class="line">  console.log(&#x27;yes&#x27;);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">  console.log(&#x27;no&#x27;);</span><br><span class="line">&#125;                     // 結果會是 yes</span><br></pre></td></tr></table></figure>
+
+<p>等等，age 不是設定是 8 嗎？不等於 10 怎麼會是 yes 呢？<br>前面說過 = 不是等號，是指定的意思，如果是以上的情況，應該用 2 個等號或 3 個等號來做比較。</p>
+<p>2 個等號 =&gt; 比較內容物是不是一樣。<br>3 個等號 =&gt; 除了比較內容物之外，還有比較是不是資料形別，資料形別是不是一樣。<br>在 if (age = 10)中，age = 10 就是指定 age 爲 10</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">console.log(1 == 1);     //  true</span><br><span class="line">console.log(1 == &#x27;1&#x27;);   //  true</span><br><span class="line">console.log(1 === &#x27;1&#x27;);  //  false</span><br></pre></td></tr></table></figure>
+
+<p>所以在判斷的時候，儘量可以的話就用三個等號會比較安全。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Bucky Chu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章連結: </span><span class="post-copyright-info"><a href="https://bucky0112.github.io/2020/04/10/JS%E5%9F%BA%E7%A4%8E%E5%9B%9E%E9%A1%A7-%E8%AE%8A%E6%95%B8%E8%88%87%E8%B3%87%E6%96%99%E5%9E%8B%E6%85%8B/">https://bucky0112.github.io/2020/04/10/JS%E5%9F%BA%E7%A4%8E%E5%9B%9E%E9%A1%A7-%E8%AE%8A%E6%95%B8%E8%88%87%E8%B3%87%E6%96%99%E5%9E%8B%E6%85%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版權聲明: </span><span class="post-copyright-info">本部落格所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 許可協議。轉載請註明來自 <a href="https://bucky0112.github.io" target="_blank">Bucky's f2e bucket</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/javascript/">javascript</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/04/11/JS%E5%9F%BA%E7%A4%8E%E5%9B%9E%E9%A1%A7-function/"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">JS 基礎回顧 - function</div></div></a></div><div class="next-post pull-right"><a href="/2020/04/03/Think%20first,%20code%20later/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Think first, code later</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相關推薦</span></div><div class="relatedPosts-list"><div><a href="/2020/04/01/JSnotice：語法解析器、詞彙環境、執行環境/" title="JS notice： 語法解析器、詞彙環境、執行環境"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-01</div><div class="title">JS notice： 語法解析器、詞彙環境、執行環境</div></div></a></div><div><a href="/2022/02/24/JSnotice：值配對與物件/" title="JS notice： 名稱/值配對與物件"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-24</div><div class="title">JS notice： 名稱/值配對與物件</div></div></a></div><div><a href="/2020/05/12/JSreview-loop/" title="JS 基礎回顧 - 迴圈"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-12</div><div class="title">JS 基礎回顧 - 迴圈</div></div></a></div><div><a href="/2020/05/01/JS基礎回顧-物件與陣列/" title="JS 基礎回顧 - 物件與陣列"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-01</div><div class="title">JS 基礎回顧 - 物件與陣列</div></div></a></div><div><a href="/2020/09/26/city-weather-app-create-note/" title="City Weather App 開發筆記"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-26</div><div class="title">City Weather App 開發筆記</div></div></a></div><div><a href="/2020/05/19/execution-context-code-execution/" title="執行環境：程式執行"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-19</div><div class="title">執行環境：程式執行</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Bucky Chu</div><div class="author-info__description">巴奇的前端桶</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">標籤</div><div class="length-num">95</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分類</div><div class="length-num">19</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/bucky0112"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/bucky0112" target="_blank" title="GitHub"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:bucky0112@gmail.com" target="_blank" title="E-Mail"><i class="far fa-envelope"></i></a><a class="social-icon" href="https://twitter.com/bucky0112" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a><a class="social-icon" href="https://www.facebook.com/timmychu0112" target="_blank" title="FB Page"><i class="fab fa-facebook"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">本網站更新至 hexo 5.4.0</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目錄</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%8A%E6%95%B8"><span class="toc-number">1.</span> <span class="toc-text">變數</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E5%9E%8B%E5%88%A5"><span class="toc-number">2.</span> <span class="toc-text">資料型別</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%9E%8B%E5%88%A5"><span class="toc-number">2.1.</span> <span class="toc-text">基本型別</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B8%E5%AD%97%E3%80%81%E5%AD%97%E4%B8%B2"><span class="toc-number">2.1.1.</span> <span class="toc-text">數字、字串</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%83%E6%9E%97%E5%80%BC"><span class="toc-number">2.1.2.</span> <span class="toc-text">布林值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined-%E8%B7%9F-null"><span class="toc-number">2.1.3.</span> <span class="toc-text">undefined 跟 null</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E6%8A%8A%E4%B8%8D%E5%90%8C%E5%9E%8B%E5%88%A5%E6%94%BE%E5%9C%A8%E4%B8%80%E8%B5%B7%EF%BC%9F"><span class="toc-number">2.2.</span> <span class="toc-text">如果把不同型別放在一起？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AD%89%E8%99%9F"><span class="toc-number">2.3.</span> <span class="toc-text">等號</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#a-1-1-%E6%98%AF%E4%BB%80%E9%BA%BC%E6%83%85%E6%B3%81"><span class="toc-number">2.3.1.</span> <span class="toc-text">a + 1 &#x3D; 1 是什麼情況?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AD%89%E8%99%9F%EF%BC%8C%E4%B8%8D%E4%B8%80%E5%AE%9A%E7%AD%89%E6%96%BC%E3%80%8E%E7%AD%89%E6%96%BC%E3%80%8F"><span class="toc-number">2.3.2.</span> <span class="toc-text">等號，不一定等於『等於』</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/02/24/react-build-app-with-electron/" title="react_build_app_with_electron"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="react_build_app_with_electron"/></a><div class="content"><a class="title" href="/2022/02/24/react-build-app-with-electron/" title="react_build_app_with_electron">react_build_app_with_electron</a><time datetime="2022-02-24T08:42:51.000Z" title="發表於 2022-02-24 16:42:51">2022-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/24/%E5%85%A8%E5%9F%9F%E7%92%B0%E5%A2%83%E8%88%87%E5%85%A8%E5%9F%9F%E7%89%A9%E4%BB%B6/" title="全域環境與全域物件"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="全域環境與全域物件"/></a><div class="content"><a class="title" href="/2022/02/24/%E5%85%A8%E5%9F%9F%E7%92%B0%E5%A2%83%E8%88%87%E5%85%A8%E5%9F%9F%E7%89%A9%E4%BB%B6/" title="全域環境與全域物件">全域環境與全域物件</a><time datetime="2022-02-24T08:37:19.638Z" title="發表於 2022-02-24 16:37:19">2022-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/02/24/JSnotice%EF%BC%9A%E5%80%BC%E9%85%8D%E5%B0%8D%E8%88%87%E7%89%A9%E4%BB%B6/" title="JS notice： 名稱/值配對與物件"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JS notice： 名稱/值配對與物件"/></a><div class="content"><a class="title" href="/2022/02/24/JSnotice%EF%BC%9A%E5%80%BC%E9%85%8D%E5%B0%8D%E8%88%87%E7%89%A9%E4%BB%B6/" title="JS notice： 名稱/值配對與物件">JS notice： 名稱/值配對與物件</a><time datetime="2022-02-24T08:37:19.629Z" title="發表於 2022-02-24 16:37:19">2022-02-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/07/11/react-search-photo/" title="React Search Photo Demo"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="React Search Photo Demo"/></a><div class="content"><a class="title" href="/2021/07/11/react-search-photo/" title="React Search Photo Demo">React Search Photo Demo</a><time datetime="2021-07-11T14:11:26.000Z" title="發表於 2021-07-11 22:11:26">2021-07-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/06/14/react-hook-useeffect/" title="使用 useEffect 來掌管元件作用"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 useEffect 來掌管元件作用"/></a><div class="content"><a class="title" href="/2021/06/14/react-hook-useeffect/" title="使用 useEffect 來掌管元件作用">使用 useEffect 來掌管元件作用</a><time datetime="2021-06-14T07:47:43.000Z" title="發表於 2021-06-14 15:47:43">2021-06-14</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Bucky Chu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主題 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="閱讀模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="淺色和深色模式轉換"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="單欄和雙欄切換"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="設定"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目錄"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到頂部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
