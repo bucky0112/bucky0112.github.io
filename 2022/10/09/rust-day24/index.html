@@ -1,0 +1,175 @@
+<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>來用 Rust 建立一個伺服器吧！Part III | Bucky's f2e bucket</title><meta name="keywords" content="rust"><meta name="author" content="Bucky Chu"><meta name="copyright" content="Bucky Chu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="在開始建立多執行緒伺服器之前，我們先來模擬一下單一執行緒伺服器會遇到的問題。 模擬請求問題直接上 code 吧！ 123456789101112131415161718use std::thread; &#x2F;&#x2F; 引入 thread 模組use std::time::Duration; &#x2F;&#x2F; 引入 Duration 模組&#x2F;&#x2F; 省略...fn handle_connection(mut stream: T">
+<meta property="og:type" content="article">
+<meta property="og:title" content="來用 Rust 建立一個伺服器吧！Part III">
+<meta property="og:url" content="https://bucky0112.github.io/2022/10/09/rust-day24/index.html">
+<meta property="og:site_name" content="Bucky&#39;s f2e bucket">
+<meta property="og:description" content="在開始建立多執行緒伺服器之前，我們先來模擬一下單一執行緒伺服器會遇到的問題。 模擬請求問題直接上 code 吧！ 123456789101112131415161718use std::thread; &#x2F;&#x2F; 引入 thread 模組use std::time::Duration; &#x2F;&#x2F; 引入 Duration 模組&#x2F;&#x2F; 省略...fn handle_connection(mut stream: T">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2022-10-08T20:41:24.000Z">
+<meta property="article:modified_time" content="2022-10-08T20:40:56.547Z">
+<meta property="article:author" content="Bucky Chu">
+<meta property="article:tag" content="rust">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://bucky0112.github.io/2022/10/09/rust-day24/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-163831260-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-163831260-1');
+</script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '複製成功',
+    error: '複製錯誤',
+    noSupport: '瀏覽器不支援'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '剛剛',
+    min: '分鐘前',
+    hour: '小時前',
+    day: '天前',
+    month: '個月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-10-09 04:40:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">87</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">標籤</div><div class="length-num">99</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分類</div><div class="length-num">21</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Bucky's f2e bucket</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">來用 Rust 建立一個伺服器吧！Part III</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">發表於</span><time class="post-meta-date-created" datetime="2022-10-08T20:41:24.000Z" title="發表於 2022-10-09 04:41:24">2022-10-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新於</span><time class="post-meta-date-updated" datetime="2022-10-08T20:40:56.547Z" title="更新於 2022-10-09 04:40:56">2022-10-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/30-%E5%A4%A9%E5%BF%AB%E5%BF%AB%E6%A8%82%E6%A8%82%E5%AD%B8-Rust/">30 天快快樂樂學 Rust</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="來用 Rust 建立一個伺服器吧！Part III"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">閱讀量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>在開始建立多執行緒伺服器之前，我們先來模擬一下單一執行緒伺服器會遇到的問題。</p>
+<h2 id="模擬請求問題"><a href="#模擬請求問題" class="headerlink" title="模擬請求問題"></a>模擬請求問題</h2><p>直接上 code 吧！</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::thread; <span class="comment">// 引入 thread 模組</span></span><br><span class="line"><span class="keyword">use</span> std::time::Duration; <span class="comment">// 引入 Duration 模組</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 省略...</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">handle_connection</span>(<span class="keyword">mut</span> stream: TcpStream) &#123;</span><br><span class="line">    <span class="comment">// 省略...</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">delay</span> = <span class="string">b&quot;GET /delay HTTP/1.1\r\n&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> (status_line, path) = <span class="keyword">if</span> buffer.<span class="title function_ invoke__">starts_with</span>(get) &#123;</span><br><span class="line">        (<span class="string">&quot;HTTP/1.1 200 OK&quot;</span>, Path::<span class="title function_ invoke__">new</span>(<span class="string">&quot;./src/HTML/hello.html&quot;</span>))</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> buffer.<span class="title function_ invoke__">starts_with</span>(delay) &#123;</span><br><span class="line">        thread::<span class="title function_ invoke__">sleep</span>(Duration::<span class="title function_ invoke__">from_secs</span>(<span class="number">10</span>)); <span class="comment">// 這裡讓執行緒睡 10 秒</span></span><br><span class="line">        (<span class="string">&quot;HTTP/1.1 200 OK&quot;</span>, Path::<span class="title function_ invoke__">new</span>(<span class="string">&quot;./src/HTML/delay.html&quot;</span>)) <span class="comment">// 這裡我們要新增一個 HTML 檔案來顯示延遲的內容</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        (<span class="string">&quot;HTTP/1.1 404 NOT FOUND&quot;</span>, Path::<span class="title function_ invoke__">new</span>(<span class="string">&quot;./src/HTML/404.html&quot;</span>))</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// 省略...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這邊我們新增了一個 <code>/delay</code> 的路徑，當我們輸入 <code>http://127.0.0.1:3000/delay</code> 時，會延遲個 10 秒，然後回傳延遲的內容。<br>而在這一頁重整的話，也一樣會發現我們的網頁會一直在等待，直到 10 秒後才會回傳內容。</p>
+<p>然後我們另外開一個分頁，這裡我們輸入 <code>http://127.0.0.1:3000/</code>，然後會正常無延遲顯示 <code>hello.html</code> 的內容。<br>這時候我們來做一個有趣的事情，我們在 <code>/delay</code> 的分頁重整，然後在 <code>/</code> 的分頁重整，我們會發現 <code>/</code> 的分頁也會等待 10 秒，然後才會回傳內容。</p>
+<p>這就是我們要解決的問題，我們的伺服器只有一個執行緒，所以當有一個請求進來時，其他的請求都會等待，直到這個請求處理完畢。</p>
+<h2 id="建立多執行緒伺服器"><a href="#建立多執行緒伺服器" class="headerlink" title="建立多執行緒伺服器"></a>建立多執行緒伺服器</h2><h3 id="使用-thread-spawn"><a href="#使用-thread-spawn" class="headerlink" title="使用 thread::spawn"></a>使用 thread::spawn</h3><p>這邊我們可以先使用 <code>thread::spawn</code> 來建立多執行緒，讓我們的伺服器可以同時處理多個請求。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 省略...</span></span><br><span class="line"><span class="keyword">use</span> std::thread; <span class="comment">// 引入 thread 模組</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">listener</span> = TcpListener::<span class="title function_ invoke__">bind</span>(<span class="built_in">format!</span>(<span class="string">&quot;127.0.0.1:&#123;&#125;&quot;</span>, PORT)).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> <span class="variable">stream</span> <span class="keyword">in</span> listener.<span class="title function_ invoke__">incoming</span>() &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">stream</span> = stream.<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"></span><br><span class="line">        thread::<span class="title function_ invoke__">spawn</span>(|| <span class="title function_ invoke__">handle_connection</span>(stream)); <span class="comment">// 這邊我們使用 thread::spawn 來建立多執行緒</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 省略...</span></span><br></pre></td></tr></table></figure>
+
+<p>這裡的作法是，因為我們的 HTTP 請求都寫在 <code>handle_connection</code> 這個函式裡面，所以我們可以直接將 <code>handle_connection</code> 這個函式傳入 <code>thread::spawn</code> 來建立多執行緒。這樣每次建立一個新的 TCP 連線時，我們就會建立一個新的執行緒來處理這個請求。</p>
+<p>然後我們來測試一下剛剛的情況，現在一樣開兩個分頁，這時候等待 10 秒結束 <code>/delay</code> 的分頁一樣會等待 10 秒才 loading 完畢，但是 <code>/</code> 的分頁不會等待，因為我們的伺服器已經可以同時處理多個請求了。</p>
+<p>不過雖然現在的作法可行，但是由於每次建立一個新的 TCP 連線時，我們就會建立一個新的執行緒來處理這個請求，所以如果有大量的請求進來，例如 DDOS 攻擊我們的伺服器，這樣就會瞬間建立大量的執行緒，會造成效能上的問題。</p>
+<p>而解決的方法有很多種，這邊我們選擇使用執行緒池（thread pool）的方式來解決。</p>
+<p>但在開始之前，我們先來看一下執行緒池的概念。</p>
+<h3 id="什麼是執行緒池？"><a href="#什麼是執行緒池？" class="headerlink" title="什麼是執行緒池？"></a>什麼是執行緒池？</h3><p>簡單說明一下，執行緒池是執行緒的一種執行模式，執行緒池的概念就是我們先建立一個執行緒池，然後把固定數量的執行緒放進去。當有請求進來時，我們就從執行緒池中取出一個執行緒來處理請求，這時候其他的執行緒也可以處理其他的請求，而當執行緒請求處理完畢後，執行緒會回到執行緒池中等待新的請求。</p>
+<p>執行緒池的好處就是我們可以讓多個執行緒同時處理請求，而不會因為單一執行緒的問題而造成等待，並且可以控制執行緒的數量，避免大量的執行緒造成效能上的問題。</p>
+<p>那麼了解了執行緒池的概念後，我們就可以來實際操作藉由執行緒池來建立多執行緒的伺服器了。</p>
+<h3 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h3><!-- 首先我們先來建立一個執行緒池，我們可以使用 `threadpool` 這個 crate 來建立執行緒池，這個 crate 的使用方法很簡單，只要在 `Cargo.toml` 中加入 `threadpool = "1.8.1"` 這一行，然後在 `main.rs` 中加入 `extern crate threadpool;` 即可。 -->
+
+<p>首先我們可以先在 <code>src</code> 的目錄下新增一個 <code>lib.rs</code> 的檔案，接著來寫執行緒池的程式碼：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/lib.rs</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">struct</span> <span class="title class_">ThreadPool</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">ThreadPool</span> &#123;</span><br><span class="line">    <span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">new</span>(size: <span class="type">usize</span>) <span class="punctuation">-&gt;</span> ThreadPool &#123;</span><br><span class="line">        <span class="built_in">assert!</span>(size &gt; <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        ThreadPool</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">execute</span>&lt;F&gt;(&amp;<span class="keyword">self</span>, f: F)</span><br><span class="line">    <span class="keyword">where</span></span><br><span class="line">        F: <span class="title function_ invoke__">FnOnce</span>() + <span class="built_in">Send</span> + <span class="symbol">&#x27;static</span>,</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這邊我們先建立一個 <code>ThreadPool</code> 的結構，然後在 <code>ThreadPool</code> 的結構中實作一個 <code>new</code> 方法，這個方法會接收一個 <code>usize</code> 的參數，代表我們要建立幾個執行緒，然後在 <code>new</code> 方法中我們會先使用 <code>assert!</code> 來確認我們傳入的參數是否大於 0，如果不是的話就會 panic 掉，然後我們會回傳一個 <code>ThreadPool</code> 的結構。</p>
+<p>接著我們想要在 <code>ThreadPool</code> 的結構中要有一個類似 <code>thread::spawn</code> 的方法，可以從參數傳入要在新執行緒開啟的閉包，他的文件是這樣：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">spawn</span>&lt;F, T&gt;(f: F) <span class="punctuation">-&gt;</span> JoinHandle&lt;T&gt;</span><br><span class="line">    <span class="keyword">where</span></span><br><span class="line">        F: <span class="title function_ invoke__">FnOnce</span>() <span class="punctuation">-&gt;</span> T,</span><br><span class="line">        F: <span class="built_in">Send</span> + <span class="symbol">&#x27;static</span>,</span><br><span class="line">        T: <span class="built_in">Send</span> + <span class="symbol">&#x27;static</span>,</span><br></pre></td></tr></table></figure>
+
+<p>所以我們在 <code>ThreadPool</code> 的結構中實作一個 <code>execute</code> 方法，這個方法會接收一個泛型 <code>F</code>，這個泛型 <code>F</code> 會是一個閉包，而這個閉包的型別會是 <code>FnOnce()</code>，也就是說這個閉包不會接收任何參數，也不會回傳任何值，而且這個閉包只會執行一次。而這個閉包的型別也會是 <code>Send</code>，也就是說這個閉包可以在多執行緒中安全的傳遞，而且這個閉包的型別也會是 <code>&#39;static</code>，也就是說這個閉包的生命週期會是整個程式的生命週期。</p>
+<p>今天先做到這邊，我們明天再繼續接著做。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Bucky Chu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章連結: </span><span class="post-copyright-info"><a href="https://bucky0112.github.io/2022/10/09/rust-day24/">https://bucky0112.github.io/2022/10/09/rust-day24/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版權聲明: </span><span class="post-copyright-info">本部落格所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 許可協議。轉載請註明來自 <a href="https://bucky0112.github.io" target="_blank">Bucky's f2e bucket</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/rust/">rust</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/10/08/rust-build-http-server-part2/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">來用 Rust 建立一個伺服器吧！Part II</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相關推薦</span></div><div class="relatedPosts-list"><div><a href="/2022/10/07/rust-build-http-server-part1/" title="來用 Rust 建立一個伺服器吧！Part I"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-07</div><div class="title">來用 Rust 建立一個伺服器吧！Part I</div></div></a></div><div><a href="/2022/10/08/rust-build-http-server-part2/" title="來用 Rust 建立一個伺服器吧！Part II"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-08</div><div class="title">來用 Rust 建立一個伺服器吧！Part II</div></div></a></div><div><a href="/2022/10/04/rust-closures/" title="Rust 的閉包"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-04</div><div class="title">Rust 的閉包</div></div></a></div><div><a href="/2022/10/02/rust-collections/" title="Rust 的集合"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-02</div><div class="title">Rust 的集合</div></div></a></div><div><a href="/2022/10/03/rust-enums/" title="Rust 的枚舉"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-10-03</div><div class="title">Rust 的枚舉</div></div></a></div><div><a href="/2022/09/21/rust-function/" title="優雅的寫出函式"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-21</div><div class="title">優雅的寫出函式</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Bucky Chu</div><div class="author-info__description">巴奇的前端桶</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">87</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">標籤</div><div class="length-num">99</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分類</div><div class="length-num">21</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/bucky0112"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/bucky0112" target="_blank" title="GitHub"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:bucky0112@gmail.com" target="_blank" title="E-Mail"><i class="far fa-envelope"></i></a><a class="social-icon" href="https://twitter.com/bucky0112" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a><a class="social-icon" href="https://www.facebook.com/timmychu0112" target="_blank" title="FB Page"><i class="fab fa-facebook"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">本網站更新至 hexo 5.4.0</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目錄</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%93%AC%E8%AB%8B%E6%B1%82%E5%95%8F%E9%A1%8C"><span class="toc-number">1.</span> <span class="toc-text">模擬請求問題</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E5%A4%9A%E5%9F%B7%E8%A1%8C%E7%B7%92%E4%BC%BA%E6%9C%8D%E5%99%A8"><span class="toc-number">2.</span> <span class="toc-text">建立多執行緒伺服器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-thread-spawn"><span class="toc-number">2.1.</span> <span class="toc-text">使用 thread::spawn</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF%E5%9F%B7%E8%A1%8C%E7%B7%92%E6%B1%A0%EF%BC%9F"><span class="toc-number">2.2.</span> <span class="toc-text">什麼是執行緒池？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%A6%E4%BD%9C"><span class="toc-number">2.3.</span> <span class="toc-text">實作</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/10/09/rust-day24/" title="來用 Rust 建立一個伺服器吧！Part III"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="來用 Rust 建立一個伺服器吧！Part III"/></a><div class="content"><a class="title" href="/2022/10/09/rust-day24/" title="來用 Rust 建立一個伺服器吧！Part III">來用 Rust 建立一個伺服器吧！Part III</a><time datetime="2022-10-08T20:41:24.000Z" title="發表於 2022-10-09 04:41:24">2022-10-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/08/rust-build-http-server-part2/" title="來用 Rust 建立一個伺服器吧！Part II"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="來用 Rust 建立一個伺服器吧！Part II"/></a><div class="content"><a class="title" href="/2022/10/08/rust-build-http-server-part2/" title="來用 Rust 建立一個伺服器吧！Part II">來用 Rust 建立一個伺服器吧！Part II</a><time datetime="2022-10-07T16:44:10.000Z" title="發表於 2022-10-08 00:44:10">2022-10-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/07/rust-build-http-server-part1/" title="來用 Rust 建立一個伺服器吧！Part I"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="來用 Rust 建立一個伺服器吧！Part I"/></a><div class="content"><a class="title" href="/2022/10/07/rust-build-http-server-part1/" title="來用 Rust 建立一個伺服器吧！Part I">來用 Rust 建立一個伺服器吧！Part I</a><time datetime="2022-10-06T17:26:21.000Z" title="發表於 2022-10-07 01:26:21">2022-10-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/06/rust-module/" title="Rust 的模組"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Rust 的模組"/></a><div class="content"><a class="title" href="/2022/10/06/rust-module/" title="Rust 的模組">Rust 的模組</a><time datetime="2022-10-05T16:20:53.000Z" title="發表於 2022-10-06 00:20:53">2022-10-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/05/rust-lifetime/" title="Rust 的生命週期"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Rust 的生命週期"/></a><div class="content"><a class="title" href="/2022/10/05/rust-lifetime/" title="Rust 的生命週期">Rust 的生命週期</a><time datetime="2022-10-04T16:35:18.000Z" title="發表於 2022-10-05 00:35:18">2022-10-05</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Bucky Chu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主題 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="閱讀模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="淺色和深色模式轉換"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="單欄和雙欄切換"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="設定"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目錄"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到頂部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
