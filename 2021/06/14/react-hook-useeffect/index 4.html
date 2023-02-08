@@ -1,0 +1,190 @@
+<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>使用 useEffect 來掌管元件作用 | Bucky's f2e bucket</title><meta name="keywords" content="react,hook,useEffect"><meta name="author" content="Bucky Chu"><meta name="copyright" content="Bucky Chu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="可以取代 Class Component 的神兵利器之一，無疑是 useState 還有本篇介紹的 useEffect。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 useEffect 來掌管元件作用">
+<meta property="og:url" content="https://bucky0112.github.io/2021/06/14/react-hook-useeffect/index.html">
+<meta property="og:site_name" content="Bucky&#39;s f2e bucket">
+<meta property="og:description" content="可以取代 Class Component 的神兵利器之一，無疑是 useState 還有本篇介紹的 useEffect。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-06-14T07:47:43.000Z">
+<meta property="article:modified_time" content="2022-02-24T08:37:19.634Z">
+<meta property="article:author" content="Bucky Chu">
+<meta property="article:tag" content="react">
+<meta property="article:tag" content="hook">
+<meta property="article:tag" content="useEffect">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://bucky0112.github.io/2021/06/14/react-hook-useeffect/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-163831260-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-163831260-1');
+</script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '複製成功',
+    error: '複製錯誤',
+    noSupport: '瀏覽器不支援'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '剛剛',
+    min: '分鐘前',
+    hour: '小時前',
+    day: '天前',
+    month: '個月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-02-24 16:37:19'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">92</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">標籤</div><div class="length-num">99</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分類</div><div class="length-num">21</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Bucky's f2e bucket</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">使用 useEffect 來掌管元件作用</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">發表於</span><time class="post-meta-date-created" datetime="2021-06-14T07:47:43.000Z" title="發表於 2021-06-14 15:47:43">2021-06-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新於</span><time class="post-meta-date-updated" datetime="2022-02-24T08:37:19.634Z" title="更新於 2022-02-24 16:37:19">2022-02-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/React-%E5%AD%B8%E7%BF%92%E7%B3%BB%E5%88%97/">React 學習系列</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="使用 useEffect 來掌管元件作用"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">閱讀量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>可以取代 Class Component 的神兵利器之一，無疑是 useState 還有本篇介紹的 useEffect。</p>
+<span id="more"></span>
+
+<h2 id="useEffect-基本運作的機制"><a href="#useEffect-基本運作的機制" class="headerlink" title="useEffect 基本運作的機制"></a>useEffect 基本運作的機制</h2><p>在 Class Component 中，有著生命週期的 API，生命週期代表著一個元件從誕生到結束，在 Vue 也有相似的概念，每個階段有不同的 API 可以操作。</p>
+<p>為了測試 <code>useEffect</code> 如何在元件中運作，下方寫了一個範例：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">React</span>, &#123; useState, useEffect &#125; <span class="keyword">from</span> <span class="string">&#x27;react&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="title function_">App</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;first&#x27;</span>);</span><br><span class="line">  <span class="keyword">const</span> [msg, setMsg] = <span class="title function_">useState</span>(<span class="string">&#x27;default&#x27;</span>);</span><br><span class="line">  <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;useEffect&#x27;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;&gt;</span></span></span><br><span class="line"><span class="language-xml">      &#123;console.log(&#x27;render&#x27;)&#125;</span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> setMsg(&#x27;default&#x27;)&#125;&gt;1<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> setMsg(&#x27;change1&#x27;)&#125;&gt;2<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> setMsg(&#x27;change2&#x27;)&#125;&gt;3<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">h1</span>&gt;</span>&#123;msg&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/&gt;</span></span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>當每次 render 的時候，看到 console.log 的順序是，而且每點選不同按鈕顯示不同內容也是一樣：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x27;first&#x27;;</span><br><span class="line">&#x27;render&#x27;;</span><br><span class="line">&#x27;useEffect&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>也就是不管頁面是第一次編譯或是重新編譯，<code>useEffect</code> 都會執行。</p>
+<p>如果想要每當狀態改變時就執行 <code>useEffect</code> 的話，就加上第二個參數，並在陣列內給值，例如：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;useEffect&#x27;</span>);</span><br><span class="line">&#125;, [msg]);</span><br></pre></td></tr></table></figure>
+
+<p>如果參數沒有給值的話，則會變成只在首次編譯畫面時才會執行 <code>useEffect</code>。</p>
+<p>這是因為參數內的值沒有改變，所以 <code>useEffect</code> 就不會執行；那麼如果在同一個頁面，由於值是一樣的，所以也是不會執行。</p>
+<h2 id="其他觸發方式"><a href="#其他觸發方式" class="headerlink" title="其他觸發方式"></a>其他觸發方式</h2><p><code>useEffect</code> 還有其他運用的地方，例如想要在 state 的值改變前做其他事情的話，就可以在 <code>useEffect</code> 的函式中回傳一個函式：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// do some thing</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// do another thing</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [])</span><br></pre></td></tr></table></figure>
+
+<p>下方做了一個範例：</p>
+<iframe src="https://codesandbox.io/embed/fervent-feistel-0rpjj?fontsize=14&hidenavigation=1&theme=dark"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="fervent-feistel-0rpjj"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
+
+<p>執行的順序是：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  (A)</span><br><span class="line">	<span class="keyword">return</span> <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    (B)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;,[])</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>當元件編譯完，會執行 (A)</li>
+<li>當元件內的 state 改變而重新渲染的話，會先執行 (B) 再執行 (A)</li>
+<li>當元件被移除時，會執行 (B)</li>
+</ul>
+<h2 id="適合使用-useEffect-的情境"><a href="#適合使用-useEffect-的情境" class="headerlink" title="適合使用 useEffect 的情境"></a>適合使用 useEffect 的情境</h2><p>由於 <code>useEffect</code> 會在編譯完執行的特性，所以也就非常適合拿來使用串接 API 取得資料時使用。</p>
+<p>下方是使用 <code>useEffect</code> 來串接 API 的範例，使用的是 <a target="_blank" rel="noopener" href="https://data.gov.tw/">政府資料開放平台</a> 中的臺北市空品每小時監測資料，比對出士林區及臭氧的相關資訊：</p>
+<iframe height="265" style="width: 100%;" scrolling="no" title="useEffect-demo" src="https://codepen.io/bucky0112/embed/QWpJPNL?height=265&theme-id=dark&default-tab=js,result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a target="_blank" rel="noopener" href='https://codepen.io/bucky0112/pen/QWpJPNL'>useEffect-demo</a> by Bucky Chu
+  (<a target="_blank" rel="noopener" href='https://codepen.io/bucky0112'>@bucky0112</a>) on <a target="_blank" rel="noopener" href='https://codepen.io'>CodePen</a>.
+</iframe>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Bucky Chu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章連結: </span><span class="post-copyright-info"><a href="https://bucky0112.github.io/2021/06/14/react-hook-useeffect/">https://bucky0112.github.io/2021/06/14/react-hook-useeffect/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版權聲明: </span><span class="post-copyright-info">本部落格所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 許可協議。轉載請註明來自 <a href="https://bucky0112.github.io" target="_blank">Bucky's f2e bucket</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/react/">react</a><a class="post-meta__tags" href="/tags/hook/">hook</a><a class="post-meta__tags" href="/tags/useEffect/">useEffect</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/07/11/react-search-photo/"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">React Search Photo Demo</div></div></a></div><div class="next-post pull-right"><a href="/2021/06/03/tailwind-install-with-react/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Tailwind 安裝 React 篇</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相關推薦</span></div><div class="relatedPosts-list"><div><a href="/2022/03/02/react-hook-usecontext/" title="使用 useContext 處理跨元件狀態"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-02</div><div class="title">使用 useContext 處理跨元件狀態</div></div></a></div><div><a href="/2022/03/03/react-hook-usereducer/" title="除了 useState，你可以選擇更好管理狀態的 useReducer"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-03</div><div class="title">除了 useState，你可以選擇更好管理狀態的 useReducer</div></div></a></div><div><a href="/2020/09/30/react-hook-usestate/" title="使用 useState 來管理狀態"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-30</div><div class="title">使用 useState 來管理狀態</div></div></a></div><div><a href="/2020/10/21/react-use-input-form/" title="React 的表單輸入運用"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-10-21</div><div class="title">React 的表單輸入運用</div></div></a></div><div><a href="/2020/09/30/compare-react-with-vue/" title="React v.s Vue 之 Component 比較心得"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-30</div><div class="title">React v.s Vue 之 Component 比較心得</div></div></a></div><div><a href="/2020/10/16/creat-react-app/" title="用 Create React App 來建立專案吧～"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-10-16</div><div class="title">用 Create React App 來建立專案吧～</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Bucky Chu</div><div class="author-info__description">巴奇的前端桶</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">92</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">標籤</div><div class="length-num">99</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分類</div><div class="length-num">21</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/bucky0112"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/bucky0112" target="_blank" title="GitHub"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:bucky0112@gmail.com" target="_blank" title="E-Mail"><i class="far fa-envelope"></i></a><a class="social-icon" href="https://twitter.com/bucky0112" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a><a class="social-icon" href="https://www.facebook.com/timmychu0112" target="_blank" title="FB Page"><i class="fab fa-facebook"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">本網站更新至 hexo 5.4.0</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目錄</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#useEffect-%E5%9F%BA%E6%9C%AC%E9%81%8B%E4%BD%9C%E7%9A%84%E6%A9%9F%E5%88%B6"><span class="toc-number">1.</span> <span class="toc-text">useEffect 基本運作的機制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E8%A7%B8%E7%99%BC%E6%96%B9%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">其他觸發方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%81%A9%E5%90%88%E4%BD%BF%E7%94%A8-useEffect-%E7%9A%84%E6%83%85%E5%A2%83"><span class="toc-number">3.</span> <span class="toc-text">適合使用 useEffect 的情境</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/10/14/rust-yew/" title="用 Rust 來寫前端 - Yew"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用 Rust 來寫前端 - Yew"/></a><div class="content"><a class="title" href="/2022/10/14/rust-yew/" title="用 Rust 來寫前端 - Yew">用 Rust 來寫前端 - Yew</a><time datetime="2022-10-13T16:31:42.000Z" title="發表於 2022-10-14 00:31:42">2022-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/13/rust-rocket-partIII/" title="來玩 Rust 的框架吧！ - Rocket - Part III"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="來玩 Rust 的框架吧！ - Rocket - Part III"/></a><div class="content"><a class="title" href="/2022/10/13/rust-rocket-partIII/" title="來玩 Rust 的框架吧！ - Rocket - Part III">來玩 Rust 的框架吧！ - Rocket - Part III</a><time datetime="2022-10-12T17:31:13.000Z" title="發表於 2022-10-13 01:31:13">2022-10-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/12/rust-rocket-partII/" title="來玩 Rust 的框架吧！ - Rocket - Part II"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="來玩 Rust 的框架吧！ - Rocket - Part II"/></a><div class="content"><a class="title" href="/2022/10/12/rust-rocket-partII/" title="來玩 Rust 的框架吧！ - Rocket - Part II">來玩 Rust 的框架吧！ - Rocket - Part II</a><time datetime="2022-10-11T16:39:16.000Z" title="發表於 2022-10-12 00:39:16">2022-10-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/11/rust-rocket-partI/" title="來玩 Rust 的框架吧！ - Rocket - Part I"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="來玩 Rust 的框架吧！ - Rocket - Part I"/></a><div class="content"><a class="title" href="/2022/10/11/rust-rocket-partI/" title="來玩 Rust 的框架吧！ - Rocket - Part I">來玩 Rust 的框架吧！ - Rocket - Part I</a><time datetime="2022-10-10T17:10:50.000Z" title="發表於 2022-10-11 01:10:50">2022-10-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/10/rust-build-http-server-part4/" title="來用 Rust 建立一個伺服器吧！Part IV"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="來用 Rust 建立一個伺服器吧！Part IV"/></a><div class="content"><a class="title" href="/2022/10/10/rust-build-http-server-part4/" title="來用 Rust 建立一個伺服器吧！Part IV">來用 Rust 建立一個伺服器吧！Part IV</a><time datetime="2022-10-09T17:03:43.000Z" title="發表於 2022-10-10 01:03:43">2022-10-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Bucky Chu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主題 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="閱讀模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="淺色和深色模式轉換"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="單欄和雙欄切換"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="設定"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目錄"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到頂部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

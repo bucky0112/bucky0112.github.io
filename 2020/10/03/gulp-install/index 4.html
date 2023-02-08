@@ -1,0 +1,193 @@
+<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>安裝 Gulp | Bucky's f2e bucket</title><meta name="keywords" content="gulp,install"><meta name="author" content="Bucky Chu"><meta name="copyright" content="Bucky Chu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Gulp 是一種前端自動化工具，可以幫助開發者將 SASS 跟 ES6 編譯成一般瀏覽器看得懂的版本，也可以把圖片跟 .css 還有 .js 壓縮成更小的檔案，是一個很方便的開發工具，這篇文章將介紹如何安裝 Gulp 並引入專案中。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安裝 Gulp">
+<meta property="og:url" content="https://bucky0112.github.io/2020/10/03/gulp-install/index.html">
+<meta property="og:site_name" content="Bucky&#39;s f2e bucket">
+<meta property="og:description" content="Gulp 是一種前端自動化工具，可以幫助開發者將 SASS 跟 ES6 編譯成一般瀏覽器看得懂的版本，也可以把圖片跟 .css 還有 .js 壓縮成更小的檔案，是一個很方便的開發工具，這篇文章將介紹如何安裝 Gulp 並引入專案中。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2020-10-03T08:56:38.000Z">
+<meta property="article:modified_time" content="2022-02-24T08:37:19.632Z">
+<meta property="article:author" content="Bucky Chu">
+<meta property="article:tag" content="gulp">
+<meta property="article:tag" content="install">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://bucky0112.github.io/2020/10/03/gulp-install/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-163831260-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-163831260-1');
+</script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '複製成功',
+    error: '複製錯誤',
+    noSupport: '瀏覽器不支援'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '剛剛',
+    min: '分鐘前',
+    hour: '小時前',
+    day: '天前',
+    month: '個月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-02-24 16:37:19'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">92</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">標籤</div><div class="length-num">99</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分類</div><div class="length-num">21</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Bucky's f2e bucket</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">安裝 Gulp</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">發表於</span><time class="post-meta-date-created" datetime="2020-10-03T08:56:38.000Z" title="發表於 2020-10-03 16:56:38">2020-10-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新於</span><time class="post-meta-date-updated" datetime="2022-02-24T08:37:19.632Z" title="更新於 2022-02-24 16:37:19">2022-02-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Gulp-%E5%89%8D%E7%AB%AF%E8%87%AA%E5%8B%95%E5%8C%96%E5%B7%A5%E5%85%B7%E9%96%8B%E7%99%BC/">Gulp 前端自動化工具開發</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="安裝 Gulp"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">閱讀量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>Gulp 是一種前端自動化工具，可以幫助開發者將 SASS 跟 ES6 編譯成一般瀏覽器看得懂的版本，也可以把圖片跟 .css 還有 .js 壓縮成更小的檔案，是一個很方便的開發工具，這篇文章將介紹如何安裝 Gulp 並引入專案中。</p>
+<span id="more"></span>
+
+<h2 id="安裝-NVM"><a href="#安裝-NVM" class="headerlink" title="安裝 NVM"></a>安裝 NVM</h2><p>安裝 Gulp 之前，首先你的電腦需要有 Node.js 的環境，建議使用 NVM 來安裝 Node.js，方便日後可以切換不同版本的 Node.js。</p>
+<ol>
+<li>使用 <code>cURL</code> 或 <code>Wget</code> 指令安裝：：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>確認是否安裝成功，輸入指令確認，成功的話會顯示 <code>nvm</code>：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">command</span> -v nvm</span><br></pre></td></tr></table></figure>
+
+<h2 id="用-NVM-安裝-Node-js"><a href="#用-NVM-安裝-Node-js" class="headerlink" title="用 NVM 安裝 Node.js"></a>用 NVM 安裝 Node.js</h2><ol>
+<li>輸入指令查看 LTS 版本（長期穩定開發版本）：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvm ls-remote --lts</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.imgur.com/vrH4DDn.png" alt="0EC377CE-88E1-44E7-92E3-9FB180441B8C"></p>
+<ol start="2">
+<li>輸入指令安裝指定版本：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvm install v12.18.4</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>確定有無成功安裝 Node.js：<code>node -v</code>，如果有會顯示版本。</li>
+<li>確認 npm 版本：<code>npm -v</code>，如果有會顯示版本。</li>
+</ol>
+<h2 id="安裝-Gulp"><a href="#安裝-Gulp" class="headerlink" title="安裝 Gulp"></a>安裝 Gulp</h2><p>安裝了一堆東西，接著就是安裝 Gulp 了：</p>
+<ol>
+<li>安裝 Gulp 在 Global 環境：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --global gulp-cli</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>確定有無成功安裝 Gulp：<code>gulp -v</code>，如果有會顯示版本。</li>
+</ol>
+<p>恭喜你，可以開始 Gulp 專案了🎉</p>
+<h2 id="初始化專案"><a href="#初始化專案" class="headerlink" title="初始化專案"></a>初始化專案</h2><ol>
+<li>利用指令 <code>cd</code> 到專案資料夾，輸入 <code>npm init</code>，建立一個 package.json，接著會確認一些資料，沒什麼需要修改的話就一路 Enter 到底就好。</li>
+<li>輸入 <code>npm install --save gulp</code>，建立資訊在你的 package.json 中。</li>
+<li>輸入 <code>gulp -v</code> 確認安裝完成。</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Bucky Chu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章連結: </span><span class="post-copyright-info"><a href="https://bucky0112.github.io/2020/10/03/gulp-install/">https://bucky0112.github.io/2020/10/03/gulp-install/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版權聲明: </span><span class="post-copyright-info">本部落格所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 許可協議。轉載請註明來自 <a href="https://bucky0112.github.io" target="_blank">Bucky's f2e bucket</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/gulp/">gulp</a><a class="post-meta__tags" href="/tags/install/">install</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/10/03/gulp-setting/"><img class="prev-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Gulp 設置準備</div></div></a></div><div class="next-post pull-right"><a href="/2020/10/01/react-logical-operators/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">React 運用邏輯運算子解決 JSX 問題</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相關推薦</span></div><div class="relatedPosts-list"><div><a href="/2020/10/03/gulp-setting/" title="Gulp 設置準備"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-10-03</div><div class="title">Gulp 設置準備</div></div></a></div><div><a href="/2021/05/06/hello-world-by-ruby/" title="Ruby[0] - 從安裝環境到 Hello World"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-06</div><div class="title">Ruby[0] - 從安裝環境到 Hello World</div></div></a></div><div><a href="/2021/06/03/tailwind-install-with-react/" title="Tailwind 安裝 React 篇"><img class="cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-03</div><div class="title">Tailwind 安裝 React 篇</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Bucky Chu</div><div class="author-info__description">巴奇的前端桶</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">92</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">標籤</div><div class="length-num">99</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分類</div><div class="length-num">21</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/bucky0112"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/bucky0112" target="_blank" title="GitHub"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:bucky0112@gmail.com" target="_blank" title="E-Mail"><i class="far fa-envelope"></i></a><a class="social-icon" href="https://twitter.com/bucky0112" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a><a class="social-icon" href="https://www.facebook.com/timmychu0112" target="_blank" title="FB Page"><i class="fab fa-facebook"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">本網站更新至 hexo 5.4.0</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目錄</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D-NVM"><span class="toc-number">1.</span> <span class="toc-text">安裝 NVM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8-NVM-%E5%AE%89%E8%A3%9D-Node-js"><span class="toc-number">2.</span> <span class="toc-text">用 NVM 安裝 Node.js</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%9D-Gulp"><span class="toc-number">3.</span> <span class="toc-text">安裝 Gulp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B0%88%E6%A1%88"><span class="toc-number">4.</span> <span class="toc-text">初始化專案</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/10/14/rust-yew/" title="用 Rust 來寫前端 - Yew"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="用 Rust 來寫前端 - Yew"/></a><div class="content"><a class="title" href="/2022/10/14/rust-yew/" title="用 Rust 來寫前端 - Yew">用 Rust 來寫前端 - Yew</a><time datetime="2022-10-13T16:31:42.000Z" title="發表於 2022-10-14 00:31:42">2022-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/13/rust-rocket-partIII/" title="來玩 Rust 的框架吧！ - Rocket - Part III"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="來玩 Rust 的框架吧！ - Rocket - Part III"/></a><div class="content"><a class="title" href="/2022/10/13/rust-rocket-partIII/" title="來玩 Rust 的框架吧！ - Rocket - Part III">來玩 Rust 的框架吧！ - Rocket - Part III</a><time datetime="2022-10-12T17:31:13.000Z" title="發表於 2022-10-13 01:31:13">2022-10-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/12/rust-rocket-partII/" title="來玩 Rust 的框架吧！ - Rocket - Part II"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="來玩 Rust 的框架吧！ - Rocket - Part II"/></a><div class="content"><a class="title" href="/2022/10/12/rust-rocket-partII/" title="來玩 Rust 的框架吧！ - Rocket - Part II">來玩 Rust 的框架吧！ - Rocket - Part II</a><time datetime="2022-10-11T16:39:16.000Z" title="發表於 2022-10-12 00:39:16">2022-10-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/11/rust-rocket-partI/" title="來玩 Rust 的框架吧！ - Rocket - Part I"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="來玩 Rust 的框架吧！ - Rocket - Part I"/></a><div class="content"><a class="title" href="/2022/10/11/rust-rocket-partI/" title="來玩 Rust 的框架吧！ - Rocket - Part I">來玩 Rust 的框架吧！ - Rocket - Part I</a><time datetime="2022-10-10T17:10:50.000Z" title="發表於 2022-10-11 01:10:50">2022-10-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/10/10/rust-build-http-server-part4/" title="來用 Rust 建立一個伺服器吧！Part IV"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="來用 Rust 建立一個伺服器吧！Part IV"/></a><div class="content"><a class="title" href="/2022/10/10/rust-build-http-server-part4/" title="來用 Rust 建立一個伺服器吧！Part IV">來用 Rust 建立一個伺服器吧！Part IV</a><time datetime="2022-10-09T17:03:43.000Z" title="發表於 2022-10-10 01:03:43">2022-10-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Bucky Chu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主題 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="閱讀模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="淺色和深色模式轉換"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="單欄和雙欄切換"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="設定"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目錄"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到頂部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
