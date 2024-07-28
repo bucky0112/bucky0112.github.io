@@ -1,0 +1,197 @@
+<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Type or Interface? | Bucky's Code Journey</title><meta name="keywords" content="TypeScript,Type,Interface"><meta name="author" content="Bucky Chu"><meta name="copyright" content="Bucky Chu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="在開發 TS 一段時間後，發覺 type 跟 interface 這兩個東西看起來很像，一直不太清楚使用的時機是什麼，所以研究了一下，寫了一篇文章記錄一下。 站在巨人的肩膀上，我參考了這部影片，有些觀點很有趣：   在開始之前，先簡單介紹一下這兩種東西，並比較一下兩者的差異。 什麼是 type？type 是 TypeScript 中用來定義型別別名的關鍵字，它可以定義任何型別。 123456789">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Type or Interface?">
+<meta property="og:url" content="http://buckychu.im/2024/07/28/type-or-interface/index.html">
+<meta property="og:site_name" content="Bucky&#39;s Code Journey">
+<meta property="og:description" content="在開發 TS 一段時間後，發覺 type 跟 interface 這兩個東西看起來很像，一直不太清楚使用的時機是什麼，所以研究了一下，寫了一篇文章記錄一下。 站在巨人的肩膀上，我參考了這部影片，有些觀點很有趣：   在開始之前，先簡單介紹一下這兩種東西，並比較一下兩者的差異。 什麼是 type？type 是 TypeScript 中用來定義型別別名的關鍵字，它可以定義任何型別。 123456789">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2024-07-28T07:55:31.000Z">
+<meta property="article:modified_time" content="2024-07-28T08:05:03.411Z">
+<meta property="article:author" content="Bucky Chu">
+<meta property="article:tag" content="TypeScript">
+<meta property="article:tag" content="Type">
+<meta property="article:tag" content="Interface">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://buckychu.im/2024/07/28/type-or-interface/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-163831260-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-163831260-1');
+</script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '複製成功',
+    error: '複製錯誤',
+    noSupport: '瀏覽器不支援'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '剛剛',
+    min: '分鐘前',
+    hour: '小時前',
+    day: '天前',
+    month: '個月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-07-28 16:05:03'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">103</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">標籤</div><div class="length-num">115</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分類</div><div class="length-num">26</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Bucky's Code Journey</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 時間軸</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 標籤</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分類</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友鏈</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Type or Interface?</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">發表於</span><time class="post-meta-date-created" datetime="2024-07-28T07:55:31.000Z" title="發表於 2024-07-28 15:55:31">2024-07-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新於</span><time class="post-meta-date-updated" datetime="2024-07-28T08:05:03.411Z" title="更新於 2024-07-28 16:05:03">2024-07-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/TypeScript/">TypeScript</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Type or Interface?"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">閱讀量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>在開發 TS 一段時間後，發覺 type 跟 interface 這兩個東西看起來很像，一直不太清楚使用的時機是什麼，所以研究了一下，寫了一篇文章記錄一下。</p>
+<p>站在巨人的肩膀上，我參考了這部影片，有些觀點很有趣：</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/oiFo2z8ILNo?si=Y616iyggvOgHnG56" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<p>在開始之前，先簡單介紹一下這兩種東西，並比較一下兩者的差異。</p>
+<h2 id="什麼是-type？"><a href="#什麼是-type？" class="headerlink" title="什麼是 type？"></a>什麼是 type？</h2><p>type 是 TypeScript 中用來定義型別別名的關鍵字，它可以定義任何型別。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">type UserType = &#123;</span><br><span class="line">    name: string</span><br><span class="line">    age: number</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const user: UserType = &#123;</span><br><span class="line">    name: &quot;Bucky&quot;,</span><br><span class="line">    age: 18,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="什麼是-interface"><a href="#什麼是-interface" class="headerlink" title="什麼是 interface"></a>什麼是 interface</h2><p>interface 是用來定義物件型別的一種方式，它主要用於描述物件的形狀。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">interface UserInter &#123;</span><br><span class="line">    name: string</span><br><span class="line">    age: number</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const user: UserInter = &#123;</span><br><span class="line">    name: &quot;Bucky&quot;,</span><br><span class="line">    age: 18,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="TypeScript-官方文件推薦哪一個？"><a href="#TypeScript-官方文件推薦哪一個？" class="headerlink" title="TypeScript 官方文件推薦哪一個？"></a>TypeScript 官方文件推薦哪一個？</h2><p>在官方文件中，<a target="_blank" rel="noopener" href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#differences-between-type-aliases-and-interfaces">Differences Between Type Aliases and Interfaces</a>這一段落最後有下一個結論：</p>
+<blockquote>
+<p>For the most part, you can choose based on personal preference, and TypeScript will tell you if it needs something to be the other kind of declaration. If you would like a heuristic, use interface until you need to use features from type.</p>
+</blockquote>
+<h2 id="interface-的局限性"><a href="#interface-的局限性" class="headerlink" title="interface 的局限性"></a>interface 的局限性</h2><p>在 Kyle 的影片當中，他提到了 interface 只能用在物件上，而不像 type 比較靈活，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">type StringType = string</span><br><span class="line"></span><br><span class="line">const user: StringType = &quot;Bucky&quot;</span><br></pre></td></tr></table></figure>
+
+<p>但是 interface 沒辦法這樣做，這樣做就會壞掉：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface StringInter = string</span><br><span class="line"></span><br><span class="line">const user: StringInter = &quot;Bucky&quot;</span><br></pre></td></tr></table></figure>
+
+<p>會跟你說：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;string&#x27; only refers to a type, but is being used as a value here.</span><br></pre></td></tr></table></figure>
+
+<p>那麼 type 還可以做到什麼呢？</p>
+<h2 id="type-的靈活"><a href="#type-的靈活" class="headerlink" title="type 的靈活"></a>type 的靈活</h2><p>例如一個變數可能有多個型別，type 可以定義聯合型別：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">type IdType = string | number</span><br><span class="line"></span><br><span class="line">const orderId: IdType = &quot;123&quot;</span><br></pre></td></tr></table></figure>
+
+<p>type 還可以用於定義交叉型別：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">type A = &#123; a: string &#125;</span><br><span class="line">type B = &#123; b: number &#125;</span><br><span class="line">type AB = A &amp; B</span><br><span class="line"></span><br><span class="line">const ab: AB = &#123; a: &quot;hello&quot;, b: 42 &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="interface-的擴充性"><a href="#interface-的擴充性" class="headerlink" title="interface 的擴充性"></a>interface 的擴充性</h2><p>interface 可以通過 <code>extends</code> 關鍵字進行擴充：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">interface A &#123;</span><br><span class="line">  age: number</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface User extends A &#123;</span><br><span class="line">  name: string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const user: User = &#123;</span><br><span class="line">  name: &quot;John&quot;,</span><br><span class="line">  age: 30,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是 type 也可以通過交叉型別實現類似的擴充：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">type User = &#123;</span><br><span class="line">  name: string</span><br><span class="line">&#125; &amp; &#123;</span><br><span class="line">  age: number</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const user: User = &#123;</span><br><span class="line">  name: &quot;John&quot;,</span><br><span class="line">  age: 30,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="type-的獨特之處"><a href="#type-的獨特之處" class="headerlink" title="type 的獨特之處"></a>type 的獨特之處</h2><p>type 可以用於定義聯合型別的物件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">type User = &#123;</span><br><span class="line">  name: string</span><br><span class="line">&#125; | &#123;</span><br><span class="line">  age: number</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const user1: User = &#123; name: &quot;John&quot; &#125;</span><br><span class="line">const user2: User = &#123; age: 30 &#125;</span><br><span class="line">const user3: User = &#123; name: &quot;John&quot;, age: 30 &#125; // 這也是合法的</span><br></pre></td></tr></table></figure>
+
+<p>這是 interface 無法直接實現的功能。</p>
+<h2 id="interface-的獨特特性：宣告合併"><a href="#interface-的獨特特性：宣告合併" class="headerlink" title="interface 的獨特特性：宣告合併"></a>interface 的獨特特性：宣告合併</h2><p>前面講了這麼多 type 做得到，但 interface 做不到的地方。不過 interface 確實是有一個 type 無法實現的特性是宣告合併（Declaration Merging）。</p>
+<p>可以讓你在多個地方定義同一個 interface，TypeScript 會自動將這些定義合併。例如：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Order</span> &#123;</span><br><span class="line">  <span class="attr">id</span>: <span class="built_in">number</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">Order</span> &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">Order</span> &#123;</span><br><span class="line">  <span class="attr">age</span>: <span class="built_in">number</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="attr">order</span>: <span class="title class_">Order</span> = &#123;</span><br><span class="line">  <span class="attr">id</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;John&quot;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">30</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但我想不到這樣做的好處有什麼，反而會降低可讀性。</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>如果你需要定義複雜的型別（如聯合型別、交叉型別、條件類型等），使用 type。</p>
+<p>如果你主要想定義物件的結構，並且可能需要在未來擴展這個結構，那就可考慮使用 interface。</p>
+<p>最後，無論選擇 type 還是 interface 都是可以的，選擇哪一個主要取決於個人偏好和團隊約定。最重要的還是在整個專案中保持一致性，程式碼的可讀性和可維護性還是最重要的。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Bucky Chu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章連結: </span><span class="post-copyright-info"><a href="http://buckychu.im/2024/07/28/type-or-interface/">http://buckychu.im/2024/07/28/type-or-interface/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版權聲明: </span><span class="post-copyright-info">本部落格所有文章除特別聲明外，均採用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 許可協議。轉載請註明來自 <a href="http://buckychu.im" target="_blank">Bucky's Code Journey</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/TypeScript/">TypeScript</a><a class="post-meta__tags" href="/tags/Type/">Type</a><a class="post-meta__tags" href="/tags/Interface/">Interface</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/07/14/use-context-on-app-router/"><img class="next-cover" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Next.js 如何在 App Router 中使用 Context？</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Bucky Chu</div><div class="author-info__description">Join Bucky Chu on his journey through the realms of front-end, back-end, and full-stack development.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">103</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">標籤</div><div class="length-num">115</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分類</div><div class="length-num">26</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/bucky0112"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/bucky0112" target="_blank" title="GitHub"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:bucky0112@gmail.com" target="_blank" title="E-Mail"><i class="far fa-envelope"></i></a><a class="social-icon" href="https://twitter.com/bucky0112" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a><a class="social-icon" href="https://www.facebook.com/timmychu0112" target="_blank" title="FB Page"><i class="fab fa-facebook"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">本網站更新至 hexo 5.4.0</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目錄</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-type%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">什麼是 type？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-interface"><span class="toc-number">2.</span> <span class="toc-text">什麼是 interface</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TypeScript-%E5%AE%98%E6%96%B9%E6%96%87%E4%BB%B6%E6%8E%A8%E8%96%A6%E5%93%AA%E4%B8%80%E5%80%8B%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">TypeScript 官方文件推薦哪一個？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#interface-%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-number">4.</span> <span class="toc-text">interface 的局限性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#type-%E7%9A%84%E9%9D%88%E6%B4%BB"><span class="toc-number">5.</span> <span class="toc-text">type 的靈活</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#interface-%E7%9A%84%E6%93%B4%E5%85%85%E6%80%A7"><span class="toc-number">6.</span> <span class="toc-text">interface 的擴充性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#type-%E7%9A%84%E7%8D%A8%E7%89%B9%E4%B9%8B%E8%99%95"><span class="toc-number">7.</span> <span class="toc-text">type 的獨特之處</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#interface-%E7%9A%84%E7%8D%A8%E7%89%B9%E7%89%B9%E6%80%A7%EF%BC%9A%E5%AE%A3%E5%91%8A%E5%90%88%E4%BD%B5"><span class="toc-number">8.</span> <span class="toc-text">interface 的獨特特性：宣告合併</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B8%BD%E7%B5%90"><span class="toc-number">9.</span> <span class="toc-text">總結</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/07/28/type-or-interface/" title="Type or Interface?"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Type or Interface?"/></a><div class="content"><a class="title" href="/2024/07/28/type-or-interface/" title="Type or Interface?">Type or Interface?</a><time datetime="2024-07-28T07:55:31.000Z" title="發表於 2024-07-28 15:55:31">2024-07-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/14/use-context-on-app-router/" title="Next.js 如何在 App Router 中使用 Context？"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Next.js 如何在 App Router 中使用 Context？"/></a><div class="content"><a class="title" href="/2024/07/14/use-context-on-app-router/" title="Next.js 如何在 App Router 中使用 Context？">Next.js 如何在 App Router 中使用 Context？</a><time datetime="2024-07-14T07:57:00.000Z" title="發表於 2024-07-14 15:57:00">2024-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/05/08/react-19-beta/" title="React 19 Beta 新武器解鎖體驗"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="React 19 Beta 新武器解鎖體驗"/></a><div class="content"><a class="title" href="/2024/05/08/react-19-beta/" title="React 19 Beta 新武器解鎖體驗">React 19 Beta 新武器解鎖體驗</a><time datetime="2024-05-08T09:26:20.000Z" title="發表於 2024-05-08 17:26:20">2024-05-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/12/16/rust-fullstack-development-lepto-gcp/" title="使用 Leptos 建立和部署 WASM 到 GCP"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用 Leptos 建立和部署 WASM 到 GCP"/></a><div class="content"><a class="title" href="/2023/12/16/rust-fullstack-development-lepto-gcp/" title="使用 Leptos 建立和部署 WASM 到 GCP">使用 Leptos 建立和部署 WASM 到 GCP</a><time datetime="2023-12-16T08:02:32.000Z" title="發表於 2023-12-16 16:02:32">2023-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/06/rust-backend-development-tide/" title="Rust Web 之旅：新時代的後端開發"><img src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Rust Web 之旅：新時代的後端開發"/></a><div class="content"><a class="title" href="/2023/08/06/rust-backend-development-tide/" title="Rust Web 之旅：新時代的後端開發">Rust Web 之旅：新時代的後端開發</a><time datetime="2023-08-06T08:52:40.000Z" title="發表於 2023-08-06 16:52:40">2023-08-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Bucky Chu</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主題 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="閱讀模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="淺色和深色模式轉換"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="單欄和雙欄切換"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="設定"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目錄"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到頂部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
